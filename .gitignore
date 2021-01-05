@@ -1,0 +1,7 @@
+# Project exclude paths
+/.bsp/
+/examples/.bsp/
+/examples/out/
+/examples/out/sponge/compile/dest/classes/
+/out/
+/out/main/compile/dest/classes/
