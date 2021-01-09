@@ -1,24 +1,24 @@
 import mill._
 import mill.api.Loose
-import mill.define.Target
+import mill.define.{Target, Task}
 import mill.scalalib._
-import mill.scalalib.publish.{Developer, License, PomSettings, VersionControl}
+import mill.scalalib.publish.{Dependency, Developer, License, PomSettings, VersionControl}
 
 
-object main extends ScalaModule with PublishModule {
+trait PluginModule extends ScalaModule with PublishModule {
 
   def millVersion = "0.9.4-13-75bc5a"
 
   def scalaVersion = "2.13.4"
 
-  def publishVersion = "0.1"
-
-  override def artifactName: T[String] = "mc-mill"
-
   override def ivyDeps: Target[Loose.Agg[Dep]] = Agg(
-    ivy"com.lihaoyi::mill-scalalib:$millVersion", //withConfiguration "provided",
-    ivy"com.lihaoyi::mill-main:$millVersion" //withConfiguration "provided"
+    ivy"com.lihaoyi::mill-scalalib:$millVersion",
+    ivy"com.lihaoyi::mill-main:$millVersion"
   )
+
+  override def publishXmlDeps: Task[Agg[Dependency]] = super.publishXmlDeps.map(_.filter(_.artifact.group equals "com.lihaoyi"))
+
+  def publishVersion = "0.0.1"
 
   def pomSettings = PomSettings(
     description = "A Mill plugin for Minecraft development",
@@ -29,5 +29,29 @@ object main extends ScalaModule with PublishModule {
     developers = Seq(
       Developer("Iltotore", "Raphaël FROMENTIN","https://github.com/Iltotore")
     )
+  )
+}
+
+object core extends PluginModule {
+
+  override def artifactName: T[String] = "millmc-core"
+}
+
+object sponge extends PluginModule {
+
+  override def artifactName: T[String] = "mcmill-sponge"
+
+  override def moduleDeps: Seq[PublishModule] = Seq(core)
+
+}
+
+object spigot extends PluginModule {
+
+  override def artifactName: T[String] = "mcmill-spigot"
+
+  override def moduleDeps: Seq[PublishModule] = Seq(core)
+
+  override def ivyDeps: Target[Loose.Agg[Dep]] = super.ivyDeps() ++ Agg(
+    ivy"org.yaml:snakeyaml:1.27"
   )
 }

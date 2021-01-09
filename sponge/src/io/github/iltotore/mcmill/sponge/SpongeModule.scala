@@ -2,15 +2,13 @@ package io.github.iltotore.mcmill.sponge
 
 import coursier.Repository
 import coursier.maven.MavenRepository
-import mill.{Agg, T}
-import mill.scalalib.{Dep, DepSyntax, JavaModule}
-import ujson._
 import io.github.iltotore.mcmill.IO._
 import mill.api.Loose
-import mill.define.{Source, Sources, Target, Task}
+import mill.define.{Target, Task}
 import mill.eval.PathRef
 import mill.modules.Jvm.createJar
-import os.Path
+import mill.scalalib.{Dep, DepSyntax, JavaModule}
+import mill.{Agg, T}
 
 import java.io.FileOutputStream
 
@@ -24,9 +22,10 @@ trait SpongeModule extends JavaModule {
     super.repositoriesTask() :+ MavenRepository("https://repo.spongepowered.org/maven")
   }
 
-  override def ivyDeps: Target[Loose.Agg[Dep]] = T {
-    super.ivyDeps() ++ Agg(ivy"org.spongepowered:spongeapi:$spongeVersion")
-  }
+  override def ivyDeps: Target[Loose.Agg[Dep]] = super.ivyDeps() ++ Agg(
+    ivy"org.spongepowered:spongeapi:$spongeVersion" withConfiguration "compile"
+  )
+
 
   def generateModInfo: Target[PathRef] = T {
     val mcMod = T.dest / "mcmod.info"
@@ -45,7 +44,7 @@ trait SpongeModule extends JavaModule {
     PathRef(mcMod)
   }
 
-  def pluginJar: Target[PathRef] = T {
+  def spongeJar: Target[PathRef] = T {
     createJar(
       localClasspath().appended(generateModInfo()).map(_.path).filter(os.exists),
       manifest()
