@@ -25,9 +25,7 @@ trait SpigotModule extends JavaModule {
     )
   }
 
-  override def ivyDeps: Target[Loose.Agg[Dep]] = T {
-    super.ivyDeps() ++ Agg(ivy"org.spigotmc:spigot-api:$spigotVersion")
-  }
+  override def compileIvyDeps: Target[Loose.Agg[Dep]] = super.compileIvyDeps() ++ Agg(ivy"org.spigotmc:spigot-api:$spigotVersion")
 
   def generatePluginDescription: Target[PathRef] = T {
     val descFile = T.dest / "plugin.yml"

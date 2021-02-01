@@ -11,7 +11,7 @@ trait SpongeScalaModule extends SpongeModule {
 
   def spongeScalaVersion: String
 
-  override def compileIvyDeps: Target[Loose.Agg[Dep]] = super.ivyDeps() ++ Agg(ivy"io.github.iltotore::sponge-scala:$spongeScalaVersion")
+  override def compileIvyDeps: Target[Loose.Agg[Dep]] = super.compileIvyDeps() ++ Agg(ivy"io.github.iltotore::sponge-scala:$spongeScalaVersion")
 
   override def assemblyRules: Seq[Assembly.Rule] = super.assemblyRules ++ Seq(
     Relocate("scala.**", "io.github.iltotore.spongescala.library"),

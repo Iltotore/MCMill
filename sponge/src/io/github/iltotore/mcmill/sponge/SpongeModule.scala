@@ -22,7 +22,7 @@ trait SpongeModule extends JavaModule {
     super.repositoriesTask() :+ MavenRepository("https://repo.spongepowered.org/maven")
   }
 
-  override def compileIvyDeps: Target[Loose.Agg[Dep]] = super.ivyDeps() ++ Agg(
+  override def compileIvyDeps: Target[Loose.Agg[Dep]] = super.compileIvyDeps() ++ Agg(
     ivy"org.spongepowered:spongeapi:$spongeVersion" withConfiguration "compile"
   )
 
