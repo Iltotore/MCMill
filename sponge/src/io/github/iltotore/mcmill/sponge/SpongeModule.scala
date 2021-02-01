@@ -19,7 +19,7 @@ trait SpongeModule extends JavaModule {
   def spongeMetadata: SpongeMetadata
 
   override def repositoriesTask: Task[Seq[Repository]] = T.task {
-    super.repositoriesTask() :+ MavenRepository("https://repo.spongepowered.org/maven")
+    super.repositoriesTask() :+ MavenRepository("https://repo.spongepowered.org/repository/maven-public/")
   }
 
   override def compileIvyDeps: Target[Loose.Agg[Dep]] = super.compileIvyDeps() ++ Agg(
