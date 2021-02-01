@@ -4,9 +4,9 @@ import coursier.Repository
 import coursier.maven.MavenRepository
 import io.github.iltotore.mcmill.IO._
 import mill.api.Loose
-import mill.define.{Target, Task}
+import mill.define.{Source, Target, Task}
 import mill.eval.PathRef
-import mill.modules.Jvm.createJar
+import mill.modules.Jvm.{createAssembly, createJar}
 import mill.scalalib.{Dep, DepSyntax, JavaModule}
 import mill.{Agg, T}
 
@@ -22,12 +22,12 @@ trait SpongeModule extends JavaModule {
     super.repositoriesTask() :+ MavenRepository("https://repo.spongepowered.org/maven")
   }
 
-  override def ivyDeps: Target[Loose.Agg[Dep]] = super.ivyDeps() ++ Agg(
+  override def compileIvyDeps: Target[Loose.Agg[Dep]] = super.ivyDeps() ++ Agg(
     ivy"org.spongepowered:spongeapi:$spongeVersion" withConfiguration "compile"
   )
 
 
-  def generateModInfo: Target[PathRef] = T {
+  def generateModInfo = T {
     val mcMod = T.dest / "mcmod.info"
     val json = ujson.Arr(
       ujson.Obj(
@@ -41,13 +41,15 @@ trait SpongeModule extends JavaModule {
       )
     ).toString()
     withResources(new FileOutputStream(mcMod.toIO))(_.write(json.getBytes()))
-    PathRef(mcMod)
+    PathRef(T.dest)
   }
 
   def spongeJar: Target[PathRef] = T {
-    createJar(
-      localClasspath().appended(generateModInfo()).map(_.path).filter(os.exists),
-      manifest()
+    createAssembly(
+      inputPaths = Agg.from(localClasspath().appended(generateModInfo()).map(_.path)),
+      manifest = manifest(),
+      base = Some(upstreamAssembly().path),
+      assemblyRules = assemblyRules
     )
   }
 }

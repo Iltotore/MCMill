@@ -7,7 +7,7 @@ import mill.scalalib.publish.{Dependency, Developer, License, PomSettings, Versi
 
 trait PluginModule extends ScalaModule with PublishModule {
 
-  def millVersion = "0.9.4-13-75bc5a"
+  def millVersion = "0.9.4"
 
   def scalaVersion = "2.13.4"
 
@@ -16,16 +16,16 @@ trait PluginModule extends ScalaModule with PublishModule {
     ivy"com.lihaoyi::mill-main:$millVersion"
   )
 
-  override def publishXmlDeps: Task[Agg[Dependency]] = super.publishXmlDeps.map(_.filter(_.artifact.group equals "com.lihaoyi"))
+  override def publishXmlDeps: Task[Agg[Dependency]] = super.publishXmlDeps.map(_.filter(!_.artifact.group.equals("com.lihaoyi")))
 
-  def publishVersion = "0.0.1"
+  def publishVersion = "0.0.2"
 
   def pomSettings = PomSettings(
     description = "A Mill plugin for Minecraft development",
     organization = "io.github.iltotore",
     url = "https://github.com/Iltotore/MCMill",
     licenses = Seq(License.`Apache-2.0`),
-    versionControl = VersionControl.github("Iltotore", "https://github.com/Iltotore/MCMill.git"),
+    versionControl = VersionControl.github("Iltotore", "MCMill"),
     developers = Seq(
       Developer("Iltotore", "Raphaël FROMENTIN","https://github.com/Iltotore")
     )

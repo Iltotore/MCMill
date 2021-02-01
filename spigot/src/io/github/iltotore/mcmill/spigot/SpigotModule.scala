@@ -5,7 +5,7 @@ import coursier.maven.MavenRepository
 import mill._
 import mill.api.{Loose, PathRef}
 import mill.define.{Target, Task}
-import mill.modules.Jvm.createJar
+import mill.modules.Jvm.{createAssembly, createJar}
 import mill.scalalib._
 import org.yaml.snakeyaml.Yaml
 
@@ -44,9 +44,12 @@ trait SpigotModule extends JavaModule {
   }
 
   def spigotJar: Target[PathRef] = T {
-    createJar(
-      localClasspath().appended(generatePluginDescription()).map(_.path).filter(os.exists),
-      manifest()
+    createAssembly(
+      Agg.from(localClasspath().appended(generatePluginDescription()).map(_.path).filter(os.exists)),
+      manifest(),
+      prependShellScript(),
+      Some(upstreamAssembly().path),
+      assemblyRules
     )
   }
 }
