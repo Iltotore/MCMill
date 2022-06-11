@@ -1,12 +1,9 @@
-import mill._
-import mill.scalalib._
+import mill._, scalalib._
 import $ivy.`io.github.iltotore::mcmill-sponge:0.0.2`, $ivy.`io.github.iltotore::mcmill-spigot:0.0.2`
 import io.github.iltotore.mcmill.sponge._
 import io.github.iltotore.mcmill.spigot._
-import mill.api.Loose
-import mill.define.Target
 
-object sponge extends ScalaModule with SpongeScalaModule {
+object sponge extends ScalaModule with SpongeModule {
 
   def scalaVersion = "2.13.4"
 
@@ -21,13 +18,9 @@ object sponge extends ScalaModule with SpongeScalaModule {
     description = "This is a simple MCMill test for Sponge",
     authors = Seq("Il_totore")
   )
-
-  override def compileIvyDeps: Target[Loose.Agg[Dep]] = super.compileIvyDeps() ++ Agg(
-    ivy"io.github.iltotore::ec-client:2.0"
-  )
 }
 
-/*object spigot extends ScalaModule with SpigotModule {
+object spigot extends ScalaModule with SpigotModule {
 
   def scalaVersion = "2.13.4"
 
@@ -39,4 +32,8 @@ object sponge extends ScalaModule with SpongeScalaModule {
     description = "This is a simple MCMill test for Spigot",
     authors = Seq("Il_totore")
   )
-}*/
+
+  def test = T {
+    println(resources())
+  }
+}

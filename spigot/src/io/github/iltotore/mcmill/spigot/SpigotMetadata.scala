@@ -2,6 +2,7 @@ package io.github.iltotore.mcmill.spigot
 
 case class SpigotMetadata(name: String,
                           version: String,
+                          mainClass: String,
                           description: String = "",
                           website: String = "",
                           authors: Seq[String] = Seq.empty,

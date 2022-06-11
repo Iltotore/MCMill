@@ -1,53 +1,55 @@
 package io.github.iltotore.mcmill.spigot
 
-import coursier.Repository
 import coursier.maven.MavenRepository
+import io.github.iltotore.mcmill.MinecraftModule
 import mill._
-import mill.api.{Loose, PathRef}
-import mill.define.{Target, Task}
-import mill.modules.Jvm.{createAssembly, createJar}
+import mill.api.PathRef
+import mill.define.Source
 import mill.scalalib._
-import org.yaml.snakeyaml.Yaml
+import org.yaml.snakeyaml.{DumperOptions, Yaml}
 
 import java.io.FileWriter
+import scala.collection.mutable
 import scala.jdk.CollectionConverters.MapHasAsJava
 
-trait SpigotModule extends JavaModule {
+trait SpigotModule extends MinecraftModule {
 
   def spigotVersion: String
 
   def spigotMetadata: SpigotMetadata
 
-  override def repositoriesTask: Task[Seq[Repository]] = T.task {
+  override def repositoriesTask = T.task {
     super.repositoriesTask() ++ Seq(
       MavenRepository("https://hub.spigotmc.org/nexus/content/repositories/snapshots/"),
       MavenRepository("https://oss.sonatype.org/content/repositories/snapshots"),
     )
   }
 
-  override def compileIvyDeps: Target[Loose.Agg[Dep]] = super.compileIvyDeps() ++ Agg(ivy"org.spigotmc:spigot-api:$spigotVersion")
+  override def compileIvyDeps = super.compileIvyDeps() ++ Agg(ivy"org.spigotmc:spigot-api:$spigotVersion")
 
-  def generatePluginDescription: Target[PathRef] = T {
+  override def pluginDescription: Source = T.source {
     val descFile = T.dest / "plugin.yml"
-    new Yaml().dump(Map(
+
+    val desc: mutable.Map[String, Any] = mutable.Map(
       "name" -> spigotMetadata.name,
       "version" -> spigotMetadata.version,
-      "description" -> spigotMetadata.description,
-      "website" -> spigotMetadata.website,
-      "authors" -> spigotMetadata.authors.toArray,
-      "depend" -> spigotMetadata.pluginDependencies.toArray,
-      "softdepend" -> spigotMetadata.pluginSoftDependencies.toArray
-    ).asJava, new FileWriter(descFile.toIO))
-    PathRef(descFile)
+      "main" -> spigotMetadata.mainClass
+    )
+
+    if(spigotMetadata.authors.length == 1) desc.put("author", spigotMetadata.authors.head)
+    if(spigotMetadata.authors.length > 1) desc.put("authors", spigotMetadata.authors.toArray)
+    if(spigotMetadata.description.nonEmpty) desc.put("description", spigotMetadata.description)
+    if(spigotMetadata.website.nonEmpty) desc.put("website", spigotMetadata.website)
+    if(spigotMetadata.pluginDependencies.nonEmpty) desc.put("depend", spigotMetadata.pluginDependencies.toArray)
+    if(spigotMetadata.pluginSoftDependencies.nonEmpty) desc.put("softdepend", spigotMetadata.pluginSoftDependencies.toArray)
+
+    val options = new DumperOptions
+    options.setIndent(2)
+    options.setPrettyFlow(true)
+    options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK)
+
+    new Yaml(options).dump(desc.asJava, new FileWriter(descFile.toIO))
+    T.dest
   }
 
-  def spigotJar: Target[PathRef] = T {
-    createAssembly(
-      Agg.from(localClasspath().appended(generatePluginDescription()).map(_.path).filter(os.exists)),
-      manifest(),
-      prependShellScript(),
-      Some(upstreamAssembly().path),
-      assemblyRules
-    )
-  }
 }
