@@ -1,4 +1,9 @@
-import mill._, scalalib._, scalalib.publish._
+import coursier.maven.MavenRepository
+import mill._
+import mill.api.PathRef
+import mill.modules.Jvm
+import scalalib._
+import scalalib.publish._
 
 trait PluginModule extends ScalaModule with PublishModule {
 
@@ -44,7 +49,22 @@ object spigot extends PluginModule {
 
   def moduleDeps = Seq(core)
 
-  def ivyDeps = super.ivyDeps() ++ Agg(
-    ivy"org.yaml:snakeyaml:1.27"
+  def repositoriesTask = T.task {
+    super.repositoriesTask() ++ Seq(MavenRepository("https://jitpack.io/"))
+  }
+
+  def shadedIvyDeps: T[Agg[Dep]] = Agg(
+    ivy"me.carleslc.Simple-YAML:Simple-Yaml:1.8"
   )
+
+  def resolvedShadedIvyDeps: T[Agg[PathRef]] = resolveDeps(shadedIvyDeps)()
+
+  def resolvedIvyDeps = super.resolvedIvyDeps() ++ resolvedShadedIvyDeps()
+
+  def jar = T {
+    Jvm.createAssembly(
+      localClasspath().concat(resolvedShadedIvyDeps()).map(_.path).filter(os.exists),
+      manifest()
+    )
+  }
 }

@@ -29,6 +29,7 @@ object spigot extends ScalaModule with SpigotModule {
   def spigotMetadata = SpigotMetadata(
     name = "MCMill",
     version = "0.1",
+    mainClass = "io.github.iltotore.mcmill.SpigotMain",
     description = "This is a simple MCMill test for Spigot",
     authors = Seq("Il_totore")
   )
