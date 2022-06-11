@@ -11,19 +11,34 @@ import org.simpleyaml.configuration.file.YamlFile
 
 import scala.jdk.CollectionConverters.MapHasAsJava
 
+/**
+ * A module for Spigot plugin development.
+ */
 trait SpigotModule extends MinecraftModule {
 
+  /**
+   * The Spigot version to use.
+   */
   def spigotVersion: String
 
+  /**
+   * The plugin description (plugin.yml).
+   */
   def spigotMetadata: SpigotMetadata
 
-  def apiVersion: String = {
+  /**
+   * The major API version used by this plugin. Automatically set according to `spigotVersion`
+   */
+  def apiVersion: T[String] = {
     val splat = spigotVersion.split('.')
     val majorVersion = splat(1).toInt
     if(majorVersion >= 13) s"${splat(0)}.${splat(1)}"
     else "legacy"
   }
 
+  /**
+   * Plugin dependencies to add to the plugin description. See [[SpigotMetadata.downloadIvyDeps]]
+   */
   def pluginIvyDeps: T[Agg[Dep]] = allIvyDeps()
 
   override def repositoriesTask: Task[Seq[Repository]] = T.task {
@@ -42,7 +57,7 @@ trait SpigotModule extends MinecraftModule {
     descFile.set("name", spigotMetadata.name)
     descFile.set("version", spigotMetadata.version)
     descFile.set("main", spigotMetadata.mainClass)
-    descFile.set("api-version", apiVersion)
+    descFile.set("api-version", apiVersion())
 
     if(spigotMetadata.description.nonEmpty) descFile.set("description", spigotMetadata.description)
     if(spigotMetadata.website.nonEmpty) descFile.set("website", spigotMetadata.website)

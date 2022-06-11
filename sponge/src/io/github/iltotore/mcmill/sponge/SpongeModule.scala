@@ -11,10 +11,19 @@ import mill.{Agg, T}
 
 import java.io.FileOutputStream
 
+/**
+ * A module for Sponge plugin development.
+ */
 trait SpongeModule extends MinecraftModule {
 
+  /**
+   * The Sponge version to use.
+   */
   def spongeVersion: String
 
+  /**
+   * The plugin description (mcmod.info).
+   */
   def spongeMetadata: SpongeMetadata
 
   override def repositoriesTask: Task[Seq[Repository]] = T.task {

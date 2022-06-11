@@ -1,5 +1,8 @@
 package io.github.iltotore.mcmill.spigot
 
+/**
+ * The default values of a permission. Spigot's default is [[PermissionDefault.NotOp]]
+ */
 object PermissionDefault extends Enumeration {
 
   val True = Value("true")
