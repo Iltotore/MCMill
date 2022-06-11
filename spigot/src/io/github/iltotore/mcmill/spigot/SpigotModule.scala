@@ -1,15 +1,14 @@
 package io.github.iltotore.mcmill.spigot
 
+import coursier.Repository
 import coursier.maven.MavenRepository
 import io.github.iltotore.mcmill.MinecraftModule
 import mill._
-import mill.api.PathRef
-import mill.define.Source
+import mill.api.Loose
+import mill.define.{Source, Target, Task}
 import mill.scalalib._
 import org.simpleyaml.configuration.file.YamlFile
 
-import java.io.FileWriter
-import scala.collection.mutable
 import scala.jdk.CollectionConverters.MapHasAsJava
 
 trait SpigotModule extends MinecraftModule {
@@ -18,14 +17,14 @@ trait SpigotModule extends MinecraftModule {
 
   def spigotMetadata: SpigotMetadata
 
-  override def repositoriesTask = T.task {
+  override def repositoriesTask: Task[Seq[Repository]] = T.task {
     super.repositoriesTask() ++ Seq(
       MavenRepository("https://hub.spigotmc.org/nexus/content/repositories/snapshots/"),
       MavenRepository("https://oss.sonatype.org/content/repositories/snapshots"),
     )
   }
 
-  override def compileIvyDeps = super.compileIvyDeps() ++ Agg(ivy"org.spigotmc:spigot-api:$spigotVersion")
+  override def compileIvyDeps: Target[Loose.Agg[Dep]] = super.compileIvyDeps() ++ Agg(ivy"org.spigotmc:spigot-api:$spigotVersion")
 
   override def pluginDescription: Source = T.source {
     val descFile = new YamlFile((T.dest / "plugin.yml").toIO)
