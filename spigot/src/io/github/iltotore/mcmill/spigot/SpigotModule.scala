@@ -17,6 +17,13 @@ trait SpigotModule extends MinecraftModule {
 
   def spigotMetadata: SpigotMetadata
 
+  def apiVersion: String = {
+    val splat = spigotVersion.split('.')
+    val majorVersion = splat(1).toInt
+    if(majorVersion >= 13) s"${splat(0)}.${splat(1)}"
+    else "legacy"
+  }
+
   override def repositoriesTask: Task[Seq[Repository]] = T.task {
     super.repositoriesTask() ++ Seq(
       MavenRepository("https://hub.spigotmc.org/nexus/content/repositories/snapshots/"),
@@ -33,6 +40,7 @@ trait SpigotModule extends MinecraftModule {
     descFile.set("name", spigotMetadata.name)
     descFile.set("version", spigotMetadata.version)
     descFile.set("main", spigotMetadata.mainClass)
+    descFile.set("api-version", apiVersion)
 
     if(spigotMetadata.description.nonEmpty) descFile.set("description", spigotMetadata.description)
     if(spigotMetadata.website.nonEmpty) descFile.set("website", spigotMetadata.website)
