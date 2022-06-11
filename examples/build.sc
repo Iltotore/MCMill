@@ -31,10 +31,8 @@ object spigot extends ScalaModule with SpigotModule {
     version = "0.1",
     mainClass = "io.github.iltotore.mcmill.SpigotMain",
     description = "This is a simple MCMill test for Spigot",
-    authors = Seq("Il_totore")
+    authors = Seq("Il_totore"),
+    downloadIvyDeps = true
   )
 
-  def test = T {
-    println(resources())
-  }
 }

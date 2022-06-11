@@ -24,6 +24,8 @@ trait SpigotModule extends MinecraftModule {
     else "legacy"
   }
 
+  def pluginIvyDeps: T[Agg[Dep]] = allIvyDeps()
+
   override def repositoriesTask: Task[Seq[Repository]] = T.task {
     super.repositoriesTask() ++ Seq(
       MavenRepository("https://hub.spigotmc.org/nexus/content/repositories/snapshots/"),
@@ -74,6 +76,12 @@ trait SpigotModule extends MinecraftModule {
         if(permission.default != PermissionDefault.Op) section.set("default", permission.default.toString)
         if(permission.children.nonEmpty) section.createSection("children", permission.children.asJava)
       }
+    }
+
+    if(spigotMetadata.downloadIvyDeps) {
+      val resolver = resolveCoursierDependency()
+      val deps = pluginIvyDeps().map(resolver).map(d => s"${d.module.repr}:${d.version}")
+      if(deps.iterator.nonEmpty) descFile.set("libraries", deps.iterator.toArray)
     }
 
     descFile.save()

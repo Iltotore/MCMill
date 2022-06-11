@@ -13,4 +13,4 @@ case class SpigotMetadata(name: String,
                           loadBefore: Seq[String] = Seq.empty,
                           commands: Seq[Command] = Seq.empty,
                           permissions: Seq[Permission] = Seq.empty,
-                          downloadExternalLibs: Boolean = false)
+                          downloadIvyDeps: Boolean = false)
