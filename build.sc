@@ -1,22 +1,15 @@
-import mill._
-import mill.api.Loose
-import mill.define.{Target, Task}
-import mill.scalalib._
-import mill.scalalib.publish.{Dependency, Developer, License, PomSettings, VersionControl}
-
+import mill._, scalalib._, scalalib.publish._
 
 trait PluginModule extends ScalaModule with PublishModule {
 
-  def millVersion = "0.9.4"
+  def millVersion = "0.10.4"
 
-  def scalaVersion = "2.13.4"
+  def scalaVersion = "2.13.6"
 
-  override def ivyDeps: Target[Loose.Agg[Dep]] = Agg(
+  def compileIvyDeps = Agg(
     ivy"com.lihaoyi::mill-scalalib:$millVersion",
     ivy"com.lihaoyi::mill-main:$millVersion"
   )
-
-  override def publishXmlDeps: Task[Agg[Dependency]] = super.publishXmlDeps.map(_.filter(!_.artifact.group.equals("com.lihaoyi")))
 
   def publishVersion = "0.0.2"
 
@@ -34,7 +27,7 @@ trait PluginModule extends ScalaModule with PublishModule {
 
 object core extends PluginModule {
 
-  override def artifactName: T[String] = "millmc-core"
+  def artifactName: T[String] = "millmc-core"
 }
 
 object sponge extends PluginModule {
@@ -47,11 +40,11 @@ object sponge extends PluginModule {
 
 object spigot extends PluginModule {
 
-  override def artifactName: T[String] = "mcmill-spigot"
+  def artifactName = "mcmill-spigot"
 
-  override def moduleDeps: Seq[PublishModule] = Seq(core)
+  def moduleDeps = Seq(core)
 
-  override def ivyDeps: Target[Loose.Agg[Dep]] = super.ivyDeps() ++ Agg(
+  def ivyDeps = super.ivyDeps() ++ Agg(
     ivy"org.yaml:snakeyaml:1.27"
   )
 }
