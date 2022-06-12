@@ -47,7 +47,7 @@ object spigot extends SpigotModule {
 }
 ```
 
-See scaladoc for details.
+See [scaladoc](https://javadoc.io/doc/io.github.iltotore/mcmill-spigot_2.13/latest/io/github/iltotore/mcmill/spigot/index.html) for details.
 
 ### Automatic plugin dependency downloading
 
@@ -117,6 +117,11 @@ object main extends SpongeModule {
 }
 ```
 
-See scaladoc for details.
+See [scaladoc](https://javadoc.io/doc/io.github.iltotore/mcmill-sponge_2.13/latest/io/github/iltotore/mcmill/sponge/index.html) for details.
 
 **Note: If you use [SpongeScala](https://github.com/Iltotore/SpongeScala), you can use the SpongeScalaModule**
+
+## Scaladoc
+- [Core](https://javadoc.io/doc/io.github.iltotore/millmc-core_2.13/latest/io/github/iltotore/mcmill/index.html)
+- [Spigot](https://javadoc.io/doc/io.github.iltotore/mcmill-spigot_2.13/latest/io/github/iltotore/mcmill/spigot/index.html)
+- [Sponge](https://javadoc.io/doc/io.github.iltotore/mcmill-sponge_2.13/latest/io/github/iltotore/mcmill/sponge/index.html)
