@@ -4,7 +4,6 @@ import coursier.Repository
 import coursier.maven.MavenRepository
 import io.github.iltotore.mcmill.MinecraftModule
 import mill._
-import mill.api.Loose
 import mill.define.{Source, Target, Task}
 import mill.scalalib._
 import org.simpleyaml.configuration.file.YamlFile
@@ -57,7 +56,7 @@ trait SpigotModule extends MinecraftModule {
     )
   }
 
-  override def compileIvyDeps: Target[Loose.Agg[Dep]] = super.compileIvyDeps() ++ Agg(ivy"org.spigotmc:spigot-api:$spigotVersion")
+  override def minecraftApiDeps: Target[Agg[Dep]] = Agg(ivy"org.spigotmc:spigot-api:$spigotVersion")
 
   override def pluginDescription: Source = T.source {
     val descFile = new YamlFile((T.dest / "plugin.yml").toIO)

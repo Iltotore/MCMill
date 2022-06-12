@@ -30,10 +30,7 @@ trait SpongeModule extends MinecraftModule {
     super.repositoriesTask() :+ MavenRepository("https://repo.spongepowered.org/repository/maven-public/")
   }
 
-  override def compileIvyDeps: Target[Loose.Agg[Dep]] = super.compileIvyDeps() ++ Agg(
-    ivy"org.spongepowered:spongeapi:$spongeVersion" withConfiguration "compile"
-  )
-
+  override def minecraftApiDeps: T[Agg[Dep]] = Agg(ivy"org.spongepowered:spongeapi:$spongeVersion")
 
   override def pluginDescription: Source = T.source {
     val mcMod = T.dest / "mcmod.info"
