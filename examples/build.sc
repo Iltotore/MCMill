@@ -5,7 +5,7 @@ import io.github.iltotore.mcmill.spigot._
 
 object spigot extends SpigotModule {
 
-  def spigotVersion = "1.19-R0.1-SNAPSHOT/"
+  def spigotVersion = "1.19-R0.1-SNAPSHOT"
 
   def spigotMetadata = SpigotMetadata(
     name = "MCMill",
@@ -15,7 +15,6 @@ object spigot extends SpigotModule {
     authors = Seq("Il_totore"),
     downloadIvyDeps = true
   )
-
 }
 
 object sponge extends SpongeModule {
