@@ -39,7 +39,7 @@ trait SpigotModule extends MinecraftModule {
   /**
    * Plugin dependencies to add to the plugin description. See [[SpigotMetadata.downloadIvyDeps]]
    */
-  def pluginIvyDeps: T[Agg[Dep]] = allIvyDeps()
+  def pluginIvyDeps: T[Agg[Dep]] = allIvyDeps() ++ runIvyDeps()
 
   override def repositoriesTask: Task[Seq[Repository]] = T.task {
     super.repositoriesTask() ++ Seq(
