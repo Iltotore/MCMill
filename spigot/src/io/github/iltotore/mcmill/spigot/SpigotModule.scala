@@ -10,6 +10,7 @@ import mill.scalalib._
 import org.simpleyaml.configuration.file.YamlFile
 
 import scala.jdk.CollectionConverters.MapHasAsJava
+import scala.util.matching.Regex
 
 /**
  * A module for Spigot plugin development.
@@ -26,13 +27,21 @@ trait SpigotModule extends MinecraftModule {
    */
   def spigotMetadata: SpigotMetadata
 
+  private val versionPattern: Regex = raw"^(\d)\.(\d{1,2})(\.(\d{1,2}))?-R(\d*)(\.(\d))*-SNAPSHOT".r
+
+  def formattedVersion: SpigotVersion = {
+    val raw = versionPattern
+      .findFirstMatchIn(spigotVersion)
+      .getOrElse(throw new IllegalArgumentException(s"$spigotVersion is not a correct version. Should be x.xx.xx-Rx.x-SNAPSHOT"))
+
+    SpigotVersion(raw.group(1).toInt, raw.group(2).toInt, Option(raw.group(4)).map(_.toInt), (raw.group(5).toInt, raw.group(7).toInt))
+  }
+
   /**
    * The major API version used by this plugin. Automatically set according to `spigotVersion`
    */
   def apiVersion: T[String] = {
-    val splat = spigotVersion.split('.')
-    val majorVersion = splat(1).toInt
-    if(majorVersion >= 13) s"${splat(0)}.${splat(1)}"
+    if(formattedVersion.major >= 13) s"${formattedVersion.minecraft}.${formattedVersion.major}"
     else "legacy"
   }
 
