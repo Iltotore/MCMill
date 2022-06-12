@@ -1,13 +1,11 @@
 import mill._, scalalib._
-import $ivy.`io.github.iltotore::mcmill-sponge:0.0.2`, $ivy.`io.github.iltotore::mcmill-spigot:0.0.2`
+import $ivy.`io.github.iltotore::mcmill-sponge:1.0.0`, $ivy.`io.github.iltotore::mcmill-spigot:1.0.0`
 import io.github.iltotore.mcmill.sponge._
 import io.github.iltotore.mcmill.spigot._
 
-object spigot extends ScalaModule with SpigotModule {
+object spigot extends SpigotModule {
 
-  def scalaVersion = "2.13.4"
-
-  def spigotVersion = "1.16.5-R0.1-SNAPSHOT"
+  def spigotVersion = "1.19-R0.1-SNAPSHOT/"
 
   def spigotMetadata = SpigotMetadata(
     name = "MCMill",
@@ -20,11 +18,7 @@ object spigot extends ScalaModule with SpigotModule {
 
 }
 
-object sponge extends ScalaModule with SpongeModule {
-
-  def scalaVersion = "2.13.4"
-
-  def spongeScalaVersion = "0.1"
+object sponge extends SpongeModule {
 
   def spongeVersion = "7.2.0"
 
