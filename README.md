@@ -35,21 +35,45 @@ You can set up a simple Spigot plugin by inheriting from the `SpigotModule` trai
 import $ivy.`io.github.iltotore::mcmill-spigot:version`
 import io.github.iltotore.mcmill.spigot._
 
-object spigot extends ScalaModule with SpigotModule {
+object spigot extends SpigotModule {
 
-  def scalaVersion = "2.13.8"
-
-  def spigotVersion = "1.16.5-R0.1-SNAPSHOT"
+  def spigotVersion = "1.19-R0.1-SNAPSHOT"
 
   def spigotMetadata = SpigotMetadata(
     name = "plugin name",
     version = "0.1",
     mainClass = "path.to.your.MainClass"
   )
-
+}
 ```
 
 See scaladoc for details.
+
+### Automatic plugin dependency downloading
+
+Spigot has an experimental `libraries` option in the `plugin.yml` file.
+This option allows the developer to pass libraries to download before loading the plugin.
+
+If `SpigotMetadata#downloadIvyDeps` is `true` (by default: `false`), MCMill will automatically add dependencies returned
+by `pluginDeps` in the generated `plugin.yml`. Plugin dependencies are all runtime dependencies by default but can be
+overridden:
+```scala
+object spigot extends SpigotModule {
+
+  def spigotVersion = "1.19-R0.1-SNAPSHOT"
+
+  def spigotMetadata = SpigotMetadata(
+    name = "plugin name",
+    version = "0.1",
+    mainClass = "path.to.your.MainClass",
+    downloadIvyDeps = true
+  )
+  
+  def pluginIvyDeps = Agg( //Default: allIvyDeps() ++ runIvyDeps()
+    ivy"org.group:special-dep-needed-before-enabling-this-plugin:version"
+  )
+}
+```
 
 ## Sponge Support
 
@@ -61,11 +85,9 @@ import mill._, scalalib._
 import $ivy.`io.github.iltotore::mcmill-sponge:version`
 import io.github.iltotore.mcmill.sponge._
 
-object main extends ScalaModule with SpongeModule {
+object main extends SpongeModule {
 
-  def scalaVersion = "2.13.8"
-
-  def spongeVersion = "7.3.0"
+  def spongeVersion = "9.0.0"
 
   def spongeMetadata = SpongeMetadata(
     modId = "modid",
