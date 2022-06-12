@@ -16,7 +16,7 @@ trait PluginModule extends ScalaModule with PublishModule {
     ivy"com.lihaoyi::mill-main:$millVersion"
   )
 
-  def publishVersion = "0.0.2"
+  def publishVersion = "1.0.0"
 
   def pomSettings = PomSettings(
     description = "A Mill plugin for Minecraft development",
