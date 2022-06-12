@@ -75,6 +75,26 @@ object spigot extends SpigotModule {
 }
 ```
 
+### Paper support
+
+If you want to use the Paper API, use `PaperModule`. This module extends from `SpigotModule` and has the same usage.
+
+```scala
+import $ivy.`io.github.iltotore::mcmill-spigot:version`
+import io.github.iltotore.mcmill.spigot._
+
+object paper extends PaperModule {
+
+  def spigotVersion = "1.19-R0.1-SNAPSHOT"
+
+  def spigotMetadata = SpigotMetadata(
+    name = "plugin name",
+    version = "0.1",
+    mainClass = "path.to.your.MainClass"
+  )
+}
+```
+
 ## Sponge Support
 
 You can set up a simple Sponge plugin by inheriting from the `SpongeModule` trait:
