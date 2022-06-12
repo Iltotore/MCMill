@@ -1,5 +1,7 @@
 # MCMill
 
+[![mcmill-spigot Scala version support](https://index.scala-lang.org/iltotore/mcmill/millmc-core/latest.svg)](https://index.scala-lang.org/iltotore/mcmill/millmc-core)
+
 MCMill is a [Mill](https://github.com/com-lihaoyi/mill) plugin for Minecraft Development. It actually supports the
 Spigot and Sponge APIs.
 
