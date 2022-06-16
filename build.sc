@@ -16,7 +16,7 @@ trait PluginModule extends ScalaModule with PublishModule {
     ivy"com.lihaoyi::mill-main:$millVersion"
   )
 
-  def publishVersion = "1.0.0"
+  def publishVersion = "1.0.1"
 
   def pomSettings = PomSettings(
     description = "A Mill plugin for Minecraft development",
@@ -32,7 +32,7 @@ trait PluginModule extends ScalaModule with PublishModule {
 
 object core extends PluginModule {
 
-  def artifactName: T[String] = "millmc-core"
+  def artifactName: T[String] = "mcmill-core"
 }
 
 object sponge extends PluginModule {

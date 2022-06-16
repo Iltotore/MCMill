@@ -1,5 +1,5 @@
 import mill._, scalalib._
-import $ivy.`io.github.iltotore::mcmill-sponge:1.0.0`, $ivy.`io.github.iltotore::mcmill-spigot:1.0.0`
+import $ivy.`io.github.iltotore::mcmill-sponge:1.0.1`, $ivy.`io.github.iltotore::mcmill-spigot:1.0.1`
 import io.github.iltotore.mcmill.sponge._
 import io.github.iltotore.mcmill.spigot._
 
