@@ -28,6 +28,11 @@ trait PluginModule extends ScalaModule with PublishModule {
       Developer("Iltotore", "Raphaël FROMENTIN","https://github.com/Iltotore")
     )
   )
+
+  def javacOptions = Seq(
+    "-source", "8",
+    "-target", "8"
+  )
 }
 
 object core extends PluginModule {
